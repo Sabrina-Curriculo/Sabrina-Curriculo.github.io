@@ -6,612 +6,803 @@
 <title>Sabrina Lima da Silva Hipólito · Cozinheira</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,600&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,600&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
+    --tinta-noite: #171F16;
+    --tinta-noite-2: #1F2A1D;
     --verde-tabua: #2F3E2E;
-    --verde-tabua-escuro: #212D21;
-    --creme-papel: #F5EFDD;
-    --creme-papel-2: #EFE6D0;
-    --mostarda: #D8A93B;
+    --verde-tabua-clara: #4A5C46;
+    --creme-papel: #F6F1E2;
+    --creme-carta: #EFE4C9;
+    --creme-carta-2: #E8DBB9;
+    --dourado: #C79A44;
+    --dourado-claro: #E4C077;
     --tijolo: #A8432B;
-    --carvao: #262220;
-    --carvao-suave: #55504A;
-    --linha: rgba(38,34,32,0.18);
-    --sombra: 0 10px 30px rgba(33,45,33,0.14);
+    --tinta: #211C18;
+    --tinta-suave: #5C554C;
+    --linha: rgba(33,28,24,0.16);
+    --linha-dourada: rgba(199,154,68,0.45);
+    --sombra-carta: 0 18px 40px rgba(23,31,22,0.16);
+    --sombra-suave: 0 6px 18px rgba(23,31,22,0.10);
   }
 
   *{ box-sizing: border-box; }
-
   html{ scroll-behavior: smooth; }
+
+  ::selection{ background: var(--dourado-claro); color: var(--tinta-noite); }
 
   body{
     margin:0;
     background: var(--creme-papel);
-    color: var(--carvao);
+    color: var(--tinta);
     font-family: 'Work Sans', sans-serif;
     font-size: 16px;
-    line-height: 1.55;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-  }
-
-  /* textura sutil de papel */
-  body::before{
-    content:"";
-    position: fixed;
-    inset:0;
-    pointer-events:none;
-    z-index: 0;
-    opacity: .5;
-    background-image:
-      radial-gradient(rgba(38,34,32,0.035) 1px, transparent 1px);
-    background-size: 3px 3px;
-  }
-
-  .folha{
     position: relative;
-    z-index: 1;
-    max-width: 880px;
-    margin: 0 auto;
-    padding: 0 24px 80px;
+  }
+
+  /* grão de papel sutil, sobre toda a página */
+  .grao{
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   a{ color: inherit; }
 
-  .rotulo{
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: var(--carvao-suave);
+  img{ max-width: 100%; display: block; }
+
+  .surgir{
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .surgir.visivel{ opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    .surgir{ opacity: 1; transform: none; transition: none; }
+    html{ scroll-behavior: auto; }
   }
 
-  .titulo-secao{
-    font-family: 'Fraunces', serif;
-    font-weight: 700;
-    font-size: clamp(24px, 3.4vw, 32px);
-    color: var(--verde-tabua);
-    margin: 0 0 6px;
-  }
+  /* ============================================================
+     CABEÇALHO — CAPA DO CARDÁPIO
+     ============================================================ */
 
-  .intro-secao{
-    display:flex;
-    align-items:baseline;
-    gap: 14px;
-    margin-bottom: 30px;
-  }
-
-  .intro-secao .num{
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--mostarda);
-    background: var(--verde-tabua);
-    border-radius: 3px;
-    padding: 3px 8px;
-    letter-spacing: .06em;
-  }
-
-  .intro-secao .risco{
-    flex:1;
-    height:1px;
-    background: var(--linha);
-  }
-
-  section{
-    padding: 56px 0;
-    border-bottom: 1px solid var(--linha);
-  }
-  section:last-of-type{ border-bottom:none; }
-
-  /* ===================== HEADER ===================== */
-
-  header.capa{
-    position:relative;
-    background: var(--verde-tabua);
+  .capa{
+    position: relative;
+    background:
+      radial-gradient(ellipse 120% 90% at 50% -10%, rgba(199,154,68,0.10), transparent 55%),
+      linear-gradient(180deg, var(--tinta-noite) 0%, var(--tinta-noite-2) 100%);
     color: var(--creme-papel);
-    overflow:hidden;
+    overflow: hidden;
+    padding: 0 24px;
   }
 
-  header.capa .friso{
-    height: 8px;
-    width:100%;
-    background: repeating-linear-gradient(
-      -45deg,
-      var(--mostarda) 0 14px,
-      var(--tijolo) 14px 28px
+  .capa::before{
+    /* textura fina de linhas diagonais, como marcas de faca numa tábua */
+    content:"";
+    position:absolute;
+    inset:0;
+    opacity: .05;
+    background-image: repeating-linear-gradient(
+      118deg, transparent 0 26px, rgba(246,241,226,0.5) 26px 27px
     );
   }
 
-  .capa-conteudo{
+  .capa-moldura{
     position: relative;
-    max-width: 880px;
+    max-width: 760px;
     margin: 0 auto;
-    padding: 54px 24px 46px;
-    z-index: 2;
+    padding: 64px 20px 56px;
+    text-align: center;
+    border-left: 1px solid var(--linha-dourada);
+    border-right: 1px solid var(--linha-dourada);
+  }
+
+  .monograma{
+    width: 78px; height: 78px;
+    margin: 0 auto 26px;
+    border-radius: 50%;
+    border: 1px solid var(--linha-dourada);
+    display:flex; align-items:center; justify-content:center;
+    position: relative;
+  }
+  .monograma::before{
+    content:"";
+    position:absolute; inset: 6px;
+    border-radius: 50%;
+    border: 1px solid rgba(199,154,68,0.25);
+  }
+  .monograma span{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 26px;
+    color: var(--dourado-claro);
+    letter-spacing: .02em;
   }
 
   .capa-etiqueta{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
     font-family:'Space Mono', monospace;
-    font-size: 12px;
-    letter-spacing:.18em;
+    font-size: 11px;
+    letter-spacing:.28em;
     text-transform:uppercase;
-    color: var(--mostarda);
-    border: 1px solid rgba(216,169,59,0.55);
-    padding: 6px 12px;
-    border-radius: 100px;
-    margin-bottom: 22px;
-  }
-
-  .capa-etiqueta::before{
-    content:"";
-    width:6px; height:6px;
-    border-radius:50%;
-    background: var(--mostarda);
+    color: var(--dourado-claro);
+    opacity: .85;
+    margin: 0 0 20px;
   }
 
   h1.nome{
     font-family:'Fraunces', serif;
-    font-weight: 700;
-    font-size: clamp(34px, 6vw, 56px);
-    line-height: 1.04;
-    margin: 0 0 8px;
+    font-weight: 600;
+    font-size: clamp(36px, 6.4vw, 62px);
+    line-height: 1.06;
+    margin: 0 0 18px;
     letter-spacing: -0.01em;
+    background: linear-gradient(180deg, #F6E7C4 0%, var(--dourado) 55%, #B98937 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.18);
   }
 
-  .cargo-ementa{
+  .assinatura{
     font-family:'Fraunces', serif;
     font-style: italic;
-    font-weight: 500;
-    font-size: clamp(17px, 2.2vw, 21px);
-    color: var(--creme-papel-2);
-    margin: 0 0 34px;
-    max-width: 46ch;
-    opacity:.92;
+    font-weight: 400;
+    font-size: clamp(16.5px, 2.1vw, 20px);
+    color: rgba(246,241,226,0.82);
+    max-width: 44ch;
+    margin: 0 auto 40px;
   }
 
-  .contato-grade{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-    gap: 14px 22px;
-    background: rgba(245,239,221,0.06);
-    border: 1px solid rgba(245,239,221,0.16);
-    border-radius: 10px;
-    padding: 20px 22px;
+  .capa-divisor{
+    width: 64px; height: 1px;
+    margin: 0 auto 36px;
+    background: var(--linha-dourada);
   }
 
-  .contato-item{
+  .contato-linha{
     display:flex;
-    align-items:flex-start;
-    gap: 11px;
-    font-size: 14.5px;
-  }
-
-  .contato-item svg{
-    flex-shrink:0;
-    width:18px; height:18px;
-    margin-top: 2px;
-    color: var(--mostarda);
-  }
-
-  .contato-item b{
-    display:block;
-    font-family:'Space Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    color: rgba(245,239,221,0.55);
-    font-weight:400;
-    margin-bottom: 2px;
-  }
-
-  .contato-item a{ text-decoration:none; }
-  .contato-item a:hover{ text-decoration: underline; text-decoration-color: var(--mostarda); }
-
-  /* ===================== PERFIL ===================== */
-
-  .perfil-texto{
-    font-size: 16.5px;
-    max-width: 66ch;
-    color: var(--carvao);
-  }
-
-  .perfil-texto strong{ color: var(--verde-tabua); }
-
-  /* ===================== EXPERIÊNCIA — COMANDAS ===================== */
-
-  .comandas{
-    display:flex;
-    flex-direction:column;
-    gap: 20px;
-  }
-
-  .comanda{
-    position: relative;
-    background: var(--creme-papel-2);
-    border: 1px solid rgba(38,34,32,0.12);
-    border-radius: 4px;
-    padding: 20px 22px 20px 24px;
-    box-shadow: var(--sombra);
-    display:grid;
-    grid-template-columns: 168px 1fr;
-    gap: 18px;
-    align-items:start;
-  }
-
-  .comanda::before{
-    /* borda picotada à esquerda, como destacada de um bloco de comandas */
-    content:"";
-    position:absolute;
-    left:0; top:0; bottom:0;
-    width:1px;
-    background-image: repeating-linear-gradient(
-      to bottom, var(--carvao-suave) 0 6px, transparent 6px 12px
-    );
-    opacity:.35;
-  }
-
-  .comanda-periodo{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    gap: 7px;
-  }
-
-  .comanda-periodo .datas{
+    flex-wrap: wrap;
+    justify-content:center;
+    align-items:center;
+    gap: 10px 26px;
     font-family:'Space Mono', monospace;
     font-size: 12.5px;
-    color: var(--tijolo);
-    line-height:1.45;
+    color: rgba(246,241,226,0.72);
   }
 
-  .comanda-periodo .duracao{
-    display:inline-block;
-    font-family:'Space Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    color: var(--carvao-suave);
-    background: rgba(38,34,32,0.06);
-    border-radius: 3px;
-    padding: 3px 7px;
+  .contato-linha .item{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
     white-space: nowrap;
   }
 
-  .comanda-corpo h3{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-size: 18.5px;
-    margin: 0 0 4px;
-    color: var(--verde-tabua);
+  .contato-linha svg{
+    width: 14px; height:14px;
+    color: var(--dourado-claro);
+    flex-shrink:0;
   }
 
-  .comanda-cargo{
-    display:inline-block;
+  .contato-linha a{ text-decoration:none; }
+  .contato-linha a:hover{ color: var(--dourado-claro); }
+
+  .contato-linha .ponto{
+    width:3px; height:3px;
+    border-radius:50%;
+    background: rgba(246,241,226,0.3);
+  }
+
+  /* ============================================================
+     ESTRUTURA GERAL
+     ============================================================ */
+
+  main{
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  section{
+    padding: 78px 0;
+    border-bottom: 1px solid var(--linha);
+  }
+  section:last-of-type{ border-bottom: none; }
+
+  .secao-cabecalho{
+    display:flex;
+    align-items:baseline;
+    gap: 18px;
+    margin-bottom: 40px;
+  }
+
+  .secao-numero{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--dourado);
+    flex-shrink:0;
+  }
+
+  .secao-titulo{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(25px, 3.6vw, 33px);
+    color: var(--verde-tabua);
+    margin: 0;
+  }
+
+  .secao-risco{
+    flex:1;
+    height:1px;
+    background: var(--linha);
+    transform: translateY(2px);
+  }
+
+  /* ============================================================
+     I. SOBRE
+     ============================================================ */
+
+  .sobre-texto{
+    font-size: 17.5px;
+    max-width: 62ch;
+    color: var(--tinta);
+    margin: 0 0 44px;
+  }
+
+  .estatisticas{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  .estatistica{
+    text-align:left;
+    padding-left: 18px;
+    border-left: 2px solid var(--dourado);
+  }
+
+  .estatistica .num{
+    display:block;
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(30px, 5vw, 42px);
+    color: var(--verde-tabua);
+    line-height:1;
+    margin-bottom: 6px;
+  }
+
+  .estatistica .legenda{
     font-family:'Space Mono', monospace;
     font-size: 11.5px;
-    letter-spacing:.05em;
-    text-transform: uppercase;
-    color: var(--creme-papel);
-    background: var(--verde-tabua);
-    padding: 3px 9px;
-    border-radius: 2px;
-    transform: rotate(-1deg);
+    letter-spacing:.04em;
+    color: var(--tinta-suave);
   }
 
-  @media (max-width: 620px){
-    .comanda{ grid-template-columns: 1fr; }
-    .comanda::before{ display:none; }
+  @media (max-width: 560px){
+    .estatisticas{ grid-template-columns: 1fr; gap: 20px; }
   }
 
-  /* ===================== FORMAÇÃO ===================== */
+  /* ============================================================
+     II. CARDÁPIO DE EXPERIÊNCIA
+     ============================================================ */
 
-  .formacao-item{
-    display:flex;
-    gap: 18px;
-    align-items:flex-start;
-    background: var(--creme-papel-2);
-    border: 1px solid rgba(38,34,32,0.12);
-    border-radius: 6px;
-    padding: 22px 24px;
-    box-shadow: var(--sombra);
+  .fase{
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 52px;
   }
+  .fase:last-child{ margin-bottom: 0; }
 
-  .formacao-icone{
-    flex-shrink:0;
-    width: 46px; height:46px;
+  .fase::before{
+    /* espinha vertical da linha do tempo */
+    content:"";
+    position:absolute;
+    left: 4px; top: 6px; bottom: -52px;
+    width: 1px;
+    background: var(--linha);
+  }
+  .fase:last-child::before{ display:none; }
+
+  .fase-marco{
+    position:absolute;
+    left: 0; top: 4px;
+    width: 9px; height: 9px;
     border-radius:50%;
-    background: var(--verde-tabua);
-    display:flex; align-items:center; justify-content:center;
+    background: var(--dourado);
+    box-shadow: 0 0 0 3px var(--creme-papel), 0 0 0 4px var(--linha-dourada);
   }
-  .formacao-icone svg{ width:22px; height:22px; color: var(--mostarda); }
 
-  .formacao-item h3{
+  .fase-cabecalho{ margin-bottom: 18px; }
+
+  .fase-titulo{
     font-family:'Fraunces', serif;
-    font-size: 18px;
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--verde-tabua);
+    margin: 0 0 4px;
+  }
+
+  .fase-periodo{
+    font-family:'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color: var(--dourado);
+    margin-bottom: 8px;
+    display:block;
+  }
+
+  .fase-descricao{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-size: 15.5px;
+    color: var(--tinta-suave);
+    max-width: 52ch;
+    margin: 0;
+  }
+
+  .prato-cardapio{
+    padding: 20px 0;
+    border-top: 1px solid var(--linha);
+  }
+  .fase-lista .prato-cardapio:first-child{ border-top: none; padding-top: 4px; }
+
+  .prato-cardapio-topo{
+    display:flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .prato-cardapio-cargo{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: 17.5px;
+    color: var(--tinta);
+    white-space: nowrap;
+  }
+
+  .prato-cardapio-leader{
+    flex:1;
+    border-bottom: 1.5px dotted rgba(33,28,24,0.32);
+    transform: translateY(-4px);
+    min-width: 24px;
+  }
+
+  .prato-cardapio-periodo{
+    font-family:'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--tinta-suave);
+    white-space: nowrap;
+  }
+
+  .prato-cardapio-local{
+    margin: 6px 0 0;
+    font-size: 14.5px;
+    color: var(--tinta-suave);
+  }
+
+  .prato-cardapio-local .duracao{
+    font-family:'Space Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing:.04em;
+    text-transform: uppercase;
+    color: var(--verde-tabua-clara);
+  }
+
+  @media (max-width: 540px){
+    .prato-cardapio-topo{ flex-wrap: wrap; }
+    .prato-cardapio-leader{ display:none; }
+    .prato-cardapio-cargo{ white-space: normal; }
+  }
+
+  /* ============================================================
+     III. FORMAÇÃO
+     ============================================================ */
+
+  .formacao-carta{
+    display:flex;
+    gap: 22px;
+    align-items:center;
+    background: var(--creme-carta);
+    border: 1px solid var(--linha);
+    border-radius: 2px;
+    padding: 28px 30px;
+    box-shadow: var(--sombra-suave);
+  }
+
+  .formacao-selo{
+    flex-shrink:0;
+    width: 54px; height:54px;
+    border-radius:50%;
+    border: 1px solid var(--linha-dourada);
+    display:flex; align-items:center; justify-content:center;
+    background: var(--tinta-noite);
+  }
+  .formacao-selo svg{ width:24px; height:24px; color: var(--dourado-claro); }
+
+  .formacao-carta h3{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: 19px;
     margin: 0 0 3px;
     color: var(--verde-tabua);
   }
-  .formacao-item p{ margin:0; color: var(--carvao-suave); font-size: 14.5px; }
+  .formacao-carta p{ margin:0; color: var(--tinta-suave); font-size: 14.5px; }
 
-  /* ===================== TAGS / HABILIDADES ===================== */
+  /* ============================================================
+     IV. INGREDIENTES & QUALIDADES
+     ============================================================ */
 
-  .tags{
+  .ingredientes-intro{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--tinta-suave);
+    margin: 0 0 30px;
+    max-width: 56ch;
+  }
+
+  .ingredientes-lista{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 40px;
+  }
+
+  .ingrediente{
     display:flex;
-    flex-wrap:wrap;
+    align-items:baseline;
     gap: 12px;
+    padding: 14px 0;
+    border-top: 1px solid var(--linha);
+    font-size: 15px;
   }
 
-  .tag{
-    font-family:'Space Mono', monospace;
-    font-size: 13px;
-    letter-spacing:.02em;
-    background: var(--creme-papel);
-    border: 1.5px solid var(--verde-tabua);
-    color: var(--verde-tabua);
-    padding: 9px 16px;
-    border-radius: 100px;
+  .ingrediente svg{
+    width: 13px; height:13px;
+    color: var(--dourado);
+    flex-shrink:0;
+    transform: translateY(1px);
   }
 
-  .tag.destaque{
-    background: var(--verde-tabua);
-    color: var(--creme-papel);
+  @media (max-width: 620px){
+    .ingredientes-lista{ grid-template-columns: 1fr; }
   }
 
-  /* ===================== GALERIA DE PRATOS ===================== */
+  /* ============================================================
+     V. PRATOS ASSINADOS — GALERIA
+     ============================================================ */
 
-  .galeria-intro{ max-width: 60ch; color: var(--carvao-suave); font-size: 15px; margin-bottom: 30px; }
+  .pratos-intro{
+    font-size: 15px;
+    color: var(--tinta-suave);
+    max-width: 58ch;
+    margin: 0 0 40px;
+  }
 
-  .galeria-grade{
+  .galeria{
     display:grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 30px 24px;
-  }
-
-  @media (max-width: 680px){
-    .galeria-grade{ grid-template-columns: repeat(2, 1fr); gap: 24px 16px; }
-  }
-  @media (max-width: 420px){
-    .galeria-grade{ grid-template-columns: 1fr; max-width: 260px; margin: 0 auto; }
+    gap: 40px 26px;
   }
 
   .prato{
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap: 12px;
+    gap: 14px;
   }
+
+  .prato:nth-child(2), .prato:nth-child(5){ margin-top: 30px; }
 
   .prato-moldura{
     position:relative;
     width: 100%;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
-    background:
-      radial-gradient(circle at 50% 50%, var(--creme-papel) 0 61%, var(--creme-papel-2) 62% 100%);
-    border: 6px solid var(--creme-papel-2);
-    outline: 1.5px solid rgba(38,34,32,0.16);
-    box-shadow: var(--sombra), inset 0 0 0 1px rgba(38,34,32,0.05);
+    background: var(--creme-carta);
+    padding: 8px;
+    box-shadow: var(--sombra-carta);
+  }
+
+  .prato-moldura::before{
+    content:"";
+    position:absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 1px solid var(--linha-dourada);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .prato-moldura-interior{
+    width:100%; height:100%;
+    border-radius:50%;
     overflow:hidden;
     display:flex;
     align-items:center;
     justify-content:center;
+    background: var(--creme-papel);
   }
 
   .prato-moldura img{
     width:100%; height:100%;
     object-fit: cover;
     display:none;
+    border-radius: 50%;
   }
 
   .prato-vazio{
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:6px;
-    color: var(--carvao-suave);
+    gap:7px;
+    color: var(--tinta-suave);
     text-align:center;
-    padding: 0 18px;
+    padding: 0 20px;
   }
 
-  .prato-vazio svg{ width:26px; height:26px; opacity:.55; }
+  .prato-vazio svg{ width:24px; height:24px; opacity:.4; color: var(--verde-tabua); }
   .prato-vazio span{
     font-family:'Space Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing:.05em;
+    font-size: 10px;
+    letter-spacing:.06em;
     text-transform:uppercase;
-    opacity:.7;
+    opacity:.6;
   }
 
   .prato-legenda{
     font-family:'Fraunces', serif;
     font-style: italic;
-    font-size: 14.5px;
+    font-weight: 500;
+    font-size: 15px;
     color: var(--verde-tabua);
     text-align:center;
   }
 
-  /* ===================== RODAPÉ ===================== */
+  @media (max-width: 680px){
+    .galeria{ grid-template-columns: repeat(2, 1fr); gap: 32px 18px; }
+    .prato:nth-child(2), .prato:nth-child(5){ margin-top: 0; }
+  }
+  @media (max-width: 420px){
+    .galeria{ grid-template-columns: 1fr; max-width: 240px; margin: 0 auto; }
+  }
+
+  /* ============================================================
+     RODAPÉ
+     ============================================================ */
 
   footer{
+    background: var(--tinta-noite);
+    color: rgba(246,241,226,0.6);
     text-align:center;
-    padding: 34px 24px 0;
+    padding: 46px 24px;
+  }
+
+  footer .monograma{
+    width: 46px; height:46px;
+    margin-bottom: 16px;
+  }
+  footer .monograma span{ font-size: 15px; }
+
+  footer p{
+    margin: 0;
     font-family:'Space Mono', monospace;
-    font-size: 11.5px;
+    font-size: 11px;
     letter-spacing:.1em;
-    text-transform:uppercase;
-    color: var(--carvao-suave);
-    opacity:.6;
+    text-transform: uppercase;
   }
 
   @media print{
-    body::before{ display:none; }
-    .prato-moldura{ cursor:default; }
-    section{ break-inside: avoid; padding: 34px 0; }
+    .grao{ display:none; }
+    .surgir{ opacity:1; transform:none; }
+    section{ break-inside: avoid; padding: 40px 0; }
   }
 </style>
 </head>
 <body>
 
-<header class="capa">
-  <div class="friso"></div>
-  <div class="capa-conteudo">
-    <span class="capa-etiqueta">Currículo profissional</span>
-    <h1 class="nome">Sabrina Lima da Silva Hipólito</h1>
-    <p class="cargo-ementa">Cozinheira com quase duas décadas de cozinha, balcão e produção — do preparo ao prato, com carinho pelo que sai da panela.</p>
+<div class="grao"></div>
 
-    <div class="contato-grade">
-      <div class="contato-item">
+<header class="capa">
+  <div class="capa-moldura">
+    <div class="monograma"><span>SH</span></div>
+    <p class="capa-etiqueta">Currículo — Cardápio de Carreira</p>
+    <h1 class="nome">Sabrina Lima<br>da Silva Hipólito</h1>
+    <p class="assinatura">Quase vinte anos de cozinha, atendimento e cuidado com o que chega à mesa.</p>
+    <div class="capa-divisor"></div>
+    <div class="contato-linha">
+      <span class="item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.79.63 2.65a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.43-1.2a2 2 0 0 1 2.11-.45c.86.3 1.75.51 2.65.63A2 2 0 0 1 22 16.92z"/></svg>
-        <div>
-          <b>Telefone / WhatsApp</b>
-          <a href="tel:+5542998159764">(42) 99815-9764</a>
-        </div>
-      </div>
-      <div class="contato-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21c0-4.4-3.6-8-8-8s-8 3.6-8 8"/><circle cx="12" cy="7" r="4"/></svg>
-        <div>
-          <b>Idade</b>
-          39 anos
-        </div>
-      </div>
-      <div class="contato-item">
+        <a href="tel:+5542998159764">(42) 99815-9764 · WhatsApp</a>
+      </span>
+      <span class="ponto"></span>
+      <span class="item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <div>
-          <b>Endereço</b>
-          Rua Recanto dos Pássaros, 601 — Ponta Grossa
-        </div>
-      </div>
+        Rua Recanto dos Pássaros, 601 — Ponta Grossa
+      </span>
+      <span class="ponto"></span>
+      <span class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21c0-4.4-3.6-8-8-8s-8 3.6-8 8"/><circle cx="12" cy="7" r="4"/></svg>
+        39 anos
+      </span>
     </div>
   </div>
 </header>
 
-<div class="folha">
+<main>
 
-  <!-- EXPERIÊNCIA -->
-  <section id="experiencia">
-    <div class="intro-secao">
-      <span class="num">01</span>
-      <h2 class="titulo-secao" style="margin:0;">Experiência profissional</h2>
-      <span class="risco"></span>
+  <!-- I. SOBRE -->
+  <section id="sobre" class="surgir">
+    <div class="secao-cabecalho">
+      <span class="secao-numero">I.</span>
+      <h2 class="secao-titulo">Sobre</h2>
+      <span class="secao-risco"></span>
     </div>
 
-    <div class="comandas">
+    <p class="sobre-texto">Cozinheira formada na prática: quase vinte anos passando por balcões, produção e fogões até se firmar na cozinha. Sabrina construiu sua trajetória em restaurantes e serviços de alimentação, do atendimento ao cliente ao preparo dos pratos — sempre com atenção a quem senta à mesa.</p>
 
-      <div class="comanda">
-        <div class="comanda-periodo">
-          <span class="datas">08/10/2023<br>a 09/04/2025</span>
-          <span class="duracao">1 ano e 6 meses</span>
-        </div>
-        <div class="comanda-corpo">
-          <h3>TW Agro</h3>
-          <span class="comanda-cargo">Auxiliar de produção</span>
-        </div>
+    <div class="estatisticas">
+      <div class="estatistica">
+        <span class="num">19 Anos</span>
+        <span class="legenda">Anos de trajetória<br>profissional (2006–2025)</span>
       </div>
-
-      <div class="comanda">
-        <div class="comanda-periodo">
-          <span class="datas">13/10/2021<br>a 30/06/2022</span>
-          <span class="duracao">8 meses</span>
-        </div>
-        <div class="comanda-corpo">
-          <h3>Restaurante Sodexo</h3>
-          <span class="comanda-cargo">Cozinheira geral</span>
-        </div>
+      <div class="estatistica">
+        <span class="num">9 Anos</span>
+        <span class="legenda">Experiências profissionais<br>registradas</span>
       </div>
-
-      <div class="comanda">
-        <div class="comanda-periodo">
-          <span class="datas">01/12/2018<br>a 20/03/2021</span>
-          <span class="duracao">2 anos e 3 meses</span>
-        </div>
-        <div class="comanda-corpo">
-          <h3>Restaurante Charo</h3>
-          <span class="comanda-cargo">Cozinheira</span>
-        </div>
+      <div class="estatistica">
+        <span class="num">4 Anos</span>
+        <span class="legenda">Cozinhas onde atuou como<br>cozinheira ou auxiliar</span>
       </div>
-
-      <div class="comanda">
-        <div class="comanda-periodo">
-          <span class="datas">01/04/2015<br>a 08/06/2018</span>
-          <span class="duracao">3 anos e 2 meses</span>
-        </div>
-        <div class="comanda-corpo">
-          <h3>Restaurante Josélia Carraro</h3>
-          <span class="comanda-cargo">Auxiliar de cozinha / Cozinheira</span>
-        </div>
-      </div>
-
-      <div class="comanda">
-        <div class="comanda-periodo">
-          <span class="datas">11/07/2014<br>a 06/03/2015</span>
-          <span class="duracao">8 meses</span>
-        </div>
-        <div class="comanda-corpo">
-          <h3>Apetit Serviços de Alimentação</h3>
-          <span class="comanda-cargo">Auxiliar de cozinha / Meio oficial de cozinha</span>
-        </div>
-      </div>
-
-      <div class="comanda">
-        <div class="comanda-periodo">
-          <span class="datas">20/12/2011<br>a 03/05/2012</span>
-          <span class="duracao">4 meses</span>
-        </div>
-        <div class="comanda-corpo">
-          <h3>Padaria Pane D'France</h3>
-          <span class="comanda-cargo">Balconista</span>
-        </div>
-      </div>
-
-      <div class="comanda">
-        <div class="comanda-periodo">
-          <span class="datas">08/06/2011<br>a 10/12/2011</span>
-          <span class="duracao">6 meses</span>
-        </div>
-        <div class="comanda-corpo">
-          <h3>Dalbo Confecções</h3>
-          <span class="comanda-cargo">Auxiliar de produção</span>
-        </div>
-      </div>
-
-      <div class="comanda">
-        <div class="comanda-periodo">
-          <span class="datas">06/08/2007<br>a 30/04/2011</span>
-          <span class="duracao">3 anos e 8 meses</span>
-        </div>
-        <div class="comanda-corpo">
-          <h3>CSN Restaurante (Ásia 70)</h3>
-          <span class="comanda-cargo">Assistente administrativo</span>
-        </div>
-      </div>
-
-      <div class="comanda">
-        <div class="comanda-periodo">
-          <span class="datas">05/04/2006<br>a 05/02/2007</span>
-          <span class="duracao">10 meses</span>
-        </div>
-        <div class="comanda-corpo">
-          <h3>CSN Restaurante (Ásia 70)</h3>
-          <span class="comanda-cargo">Balconista</span>
-        </div>
-      </div>
-
     </div>
   </section>
 
-  <!-- FORMAÇÃO -->
-  <section id="formacao">
-    <div class="intro-secao">
-      <span class="num">02</span>
-      <h2 class="titulo-secao" style="margin:0;">Formação acadêmica</h2>
-      <span class="risco"></span>
+  <!-- II. CARDÁPIO DE EXPERIÊNCIA -->
+  <section id="experiencia" class="surgir">
+    <div class="secao-cabecalho">
+      <span class="secao-numero">II.</span>
+      <h2 class="secao-titulo">Cardápio de experiência</h2>
+      <span class="secao-risco"></span>
     </div>
 
-    <div class="formacao-item">
-      <div class="formacao-icone">
+    <div class="fase">
+      <span class="fase-marco"></span>
+      <div class="fase-cabecalho">
+        <span class="fase-periodo">2006 — 2012</span>
+        <h3 class="fase-titulo">Primeiros passos</h3>
+        <p class="fase-descricao">Os anos de balcão e produção — onde nasceu o gosto por servir bem.</p>
+      </div>
+      <div class="fase-lista">
+
+        <div class="prato-cardapio">
+          <div class="prato-cardapio-topo">
+            <span class="prato-cardapio-cargo">Balconista</span>
+            <span class="prato-cardapio-leader"></span>
+            <span class="prato-cardapio-periodo">04/2006 – 02/2007</span>
+          </div>
+          <p class="prato-cardapio-local">CSN Restaurante (Ásia 70) <span class="duracao">· 10 meses</span></p>
+        </div>
+
+        <div class="prato-cardapio">
+          <div class="prato-cardapio-topo">
+            <span class="prato-cardapio-cargo">Assistente administrativo</span>
+            <span class="prato-cardapio-leader"></span>
+            <span class="prato-cardapio-periodo">08/2007 – 04/2011</span>
+          </div>
+          <p class="prato-cardapio-local">CSN Restaurante (Ásia 70) <span class="duracao">· 3 anos e 8 meses</span></p>
+        </div>
+
+        <div class="prato-cardapio">
+          <div class="prato-cardapio-topo">
+            <span class="prato-cardapio-cargo">Auxiliar de produção</span>
+            <span class="prato-cardapio-leader"></span>
+            <span class="prato-cardapio-periodo">06/2011 – 12/2011</span>
+          </div>
+          <p class="prato-cardapio-local">Dalbo Confecções <span class="duracao">· 6 meses</span></p>
+        </div>
+
+        <div class="prato-cardapio">
+          <div class="prato-cardapio-topo">
+            <span class="prato-cardapio-cargo">Balconista</span>
+            <span class="prato-cardapio-leader"></span>
+            <span class="prato-cardapio-periodo">12/2011 – 05/2012</span>
+          </div>
+          <p class="prato-cardapio-local">Padaria Pane D'France <span class="duracao">· 4 meses</span></p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="fase">
+      <span class="fase-marco"></span>
+      <div class="fase-cabecalho">
+        <span class="fase-periodo">2014 — 2022</span>
+        <h3 class="fase-titulo">Na cozinha</h3>
+        <p class="fase-descricao">A fase em que a cozinha virou ofício: do auxiliar à cozinheira responsável pelo prato do dia.</p>
+      </div>
+      <div class="fase-lista">
+
+        <div class="prato-cardapio">
+          <div class="prato-cardapio-topo">
+            <span class="prato-cardapio-cargo">Auxiliar de cozinha / Meio oficial de cozinha</span>
+            <span class="prato-cardapio-leader"></span>
+            <span class="prato-cardapio-periodo">07.2014 – 03.2015</span>
+          </div>
+          <p class="prato-cardapio-local">Apetit Serviços de Alimentação <span class="duracao">· 8 meses</span></p>
+        </div>
+
+        <div class="prato-cardapio">
+          <div class="prato-cardapio-topo">
+            <span class="prato-cardapio-cargo">Auxiliar de cozinha / Cozinheira</span>
+            <span class="prato-cardapio-leader"></span>
+            <span class="prato-cardapio-periodo">04.2015 – 06.2018</span>
+          </div>
+          <p class="prato-cardapio-local">Restaurante Josélia Carraro <span class="duracao">· 3 anos e 2 meses</span></p>
+        </div>
+
+        <div class="prato-cardapio">
+          <div class="prato-cardapio-topo">
+            <span class="prato-cardapio-cargo">Cozinheira</span>
+            <span class="prato-cardapio-leader"></span>
+            <span class="prato-cardapio-periodo">12.2018 – 03.2021</span>
+          </div>
+          <p class="prato-cardapio-local">Restaurante Charo <span class="duracao">· 2 anos e 3 meses</span></p>
+        </div>
+
+        <div class="prato-cardapio">
+          <div class="prato-cardapio-topo">
+            <span class="prato-cardapio-cargo">Cozinheira geral</span>
+            <span class="prato-cardapio-leader"></span>
+            <span class="prato-cardapio-periodo">10.2021 – 06.2022</span>
+          </div>
+          <p class="prato-cardapio-local">Restaurante Sodexo <span class="duracao">· 8 meses</span></p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="fase">
+      <span class="fase-marco"></span>
+      <div class="fase-cabecalho">
+        <span class="fase-periodo">2023 — 2025</span>
+        <h3 class="fase-titulo">Trajetória recente</h3>
+        <p class="fase-descricao">Uma passagem pela produção, mantendo a mesma dedicação de sempre.</p>
+      </div>
+      <div class="fase-lista">
+
+        <div class="prato-cardapio">
+          <div class="prato-cardapio-topo">
+            <span class="prato-cardapio-cargo">Auxiliar de produção</span>
+            <span class="prato-cardapio-leader"></span>
+            <span class="prato-cardapio-periodo">10.2023 – 04.2025</span>
+          </div>
+          <p class="prato-cardapio-local">TW Agro <span class="duracao">· 1 ano e 6 meses</span></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- III. FORMAÇÃO -->
+  <section id="formacao" class="surgir">
+    <div class="secao-cabecalho">
+      <span class="secao-numero">III.</span>
+      <h2 class="secao-titulo">Formação</h2>
+      <span class="secao-risco"></span>
+    </div>
+
+    <div class="formacao-carta">
+      <div class="formacao-selo">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>
       </div>
       <div>
@@ -621,49 +812,71 @@
     </div>
   </section>
 
-  <!-- INFORMAÇÕES ADICIONAIS -->
-  <section id="perfil">
-    <div class="intro-secao">
-      <span class="num">03</span>
-      <h2 class="titulo-secao" style="margin:0;">Informações adicionais</h2>
-      <span class="risco"></span>
+  <!-- IV. INGREDIENTES & QUALIDADES -->
+  <section id="ingredientes" class="surgir">
+    <div class="secao-cabecalho">
+      <span class="secao-numero">IV.</span>
+      <h2 class="secao-titulo">Ingredientes &amp; qualidades</h2>
+      <span class="secao-risco"></span>
     </div>
 
-    <div class="tags">
-      <span class="tag destaque">Atendimento ao cliente</span>
-      <span class="tag destaque">Preparo de alimentos</span>
-      <span class="tag">Manutenção e limpeza do ambiente de trabalho</span>
-      <span class="tag">Facilidade de aprendizado</span>
-      <span class="tag">Trabalho em equipe</span>
-      <span class="tag">Boas referências</span>
+    <p class="ingredientes-intro">O que Sabrina leva para qualquer cozinha ou equipe em que atua.</p>
+
+    <div class="ingredientes-lista">
+      <div class="ingrediente">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>
+        Atendimento ao cliente
+      </div>
+      <div class="ingrediente">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>
+        Preparo de alimentos
+      </div>
+      <div class="ingrediente">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>
+        Manutenção e limpeza do ambiente de trabalho
+      </div>
+      <div class="ingrediente">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>
+        Facilidade de aprendizado
+      </div>
+      <div class="ingrediente">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>
+        Trabalho em equipe
+      </div>
+      <div class="ingrediente">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>
+        Boas referências profissionais
+      </div>
     </div>
   </section>
 
-  <!-- GALERIA DE PRATOS -->
-  <section id="galeria">
-    <div class="intro-secao">
-      <span class="num">04</span>
-      <h2 class="titulo-secao" style="margin:0;">Pratos desenvolvidos</h2>
-      <span class="risco"></span>
+  <!-- V. PRATOS ASSINADOS -->
+  <section id="pratos" class="surgir">
+    <div class="secao-cabecalho">
+      <span class="secao-numero">V.</span>
+      <h2 class="secao-titulo">Pratos assinados</h2>
+      <span class="secao-risco"></span>
     </div>
-    <p class="galeria-intro">Uma pequena vitrine dos pratos preparados ao longo da carreira.</p>
+
+    <p class="pratos-intro">Uma pequena vitrine dos pratos preparados ao longo da carreira.</p>
 
     <!--
       Como adicionar as fotos:
-      Troque o valor de "src" de cada <img> abaixo pelo caminho do arquivo da foto,
+      troque o "src" de cada <img> abaixo pelo caminho do arquivo,
       por exemplo: src="pratos/prato1.jpg"
-      Assim que o caminho for válido, a foto aparece automaticamente no lugar do círculo vazio.
+      A foto aparece automaticamente no lugar do círculo vazio assim que o caminho for válido.
     -->
 
-    <div class="galeria-grade">
+    <div class="galeria">
 
       <div class="prato">
         <div class="prato-moldura">
-          <img src="Comida-1.jpg" alt="Foto do prato 1"
-               onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
-          <div class="prato-vazio">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            <span>Sem foto</span>
+          <div class="prato-moldura-interior">
+            <img src="Comida-1.jpg" alt="Foto do prato 1" onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
+            <div class="prato-vazio">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span>Sem foto</span>
+            </div>
           </div>
         </div>
         <span class="prato-legenda">Prato 01</span>
@@ -671,11 +884,12 @@
 
       <div class="prato">
         <div class="prato-moldura">
-          <img src="Comida-2.jpg" alt="Foto do prato 2"
-               onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
-          <div class="prato-vazio">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            <span>Sem foto</span>
+          <div class="prato-moldura-interior">
+            <img src="Comida-2.jpg" alt="Foto do prato 2" onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
+            <div class="prato-vazio">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span>Sem foto</span>
+            </div>
           </div>
         </div>
         <span class="prato-legenda">Prato 02</span>
@@ -683,11 +897,12 @@
 
       <div class="prato">
         <div class="prato-moldura">
-          <img src="Comida-3.jpg" alt="Foto do prato 3"
-               onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
-          <div class="prato-vazio">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            <span>Sem foto</span>
+          <div class="prato-moldura-interior">
+            <img src="Comida-3.jpg" alt="Foto do prato 3" onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
+            <div class="prato-vazio">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span>Sem foto</span>
+            </div>
           </div>
         </div>
         <span class="prato-legenda">Prato 03</span>
@@ -695,11 +910,12 @@
 
       <div class="prato">
         <div class="prato-moldura">
-          <img src="Comida-4.jpg" alt="Foto do prato 4"
-               onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
-          <div class="prato-vazio">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            <span>Sem foto</span>
+          <div class="prato-moldura-interior">
+            <img src="Comida-4.jpg" alt="Foto do prato 4" onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
+            <div class="prato-vazio">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span>Sem foto</span>
+            </div>
           </div>
         </div>
         <span class="prato-legenda">Prato 04</span>
@@ -707,11 +923,12 @@
 
       <div class="prato">
         <div class="prato-moldura">
-          <img src="comida-5.jpg" alt="Foto do prato 5"
-               onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
-          <div class="prato-vazio">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            <span>Sem foto</span>
+          <div class="prato-moldura-interior">
+            <img src="comida-5.jpg" alt="Foto do prato 5" onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
+            <div class="prato-vazio">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span>Sem foto</span>
+            </div>
           </div>
         </div>
         <span class="prato-legenda">Prato 05</span>
@@ -719,11 +936,12 @@
 
       <div class="prato">
         <div class="prato-moldura">
-          <img src="comida-7.jpg" alt="Foto do prato 6"
-               onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
-          <div class="prato-vazio">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            <span>Sem foto</span>
+          <div class="prato-moldura-interior">
+            <img src="comida-7.jpg" alt="Foto do prato 6" onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
+            <div class="prato-vazio">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span>Sem foto</span>
+            </div>
           </div>
         </div>
         <span class="prato-legenda">Prato 06</span>
@@ -732,9 +950,30 @@
     </div>
   </section>
 
-  <footer>Sabrina Lima da Silva Hipólito · Cozinheira</footer>
+</main>
 
-</div>
+<footer>
+  <div class="monograma"><span>SH</span></div>
+  <p>Sabrina Lima da Silva Hipólito · Cozinheira</p>
+</footer>
+
+<script>
+  // revelar seções suavemente ao rolar a página
+  const alvos = document.querySelectorAll('.surgir');
+  if ('IntersectionObserver' in window){
+    const observador = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (entrada.isIntersecting){
+          entrada.target.classList.add('visivel');
+          observador.unobserve(entrada.target);
+        }
+      });
+    }, { threshold: 0.02, rootMargin: '0px 0px -40px 0px' });
+    alvos.forEach((alvo) => observador.observe(alvo));
+  } else {
+    alvos.forEach((alvo) => alvo.classList.add('visivel'));
+  }
+</script>
 
 </body>
 </html>
